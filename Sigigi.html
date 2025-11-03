@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Diagnosa – Pakar Gigi</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: "Segoe UI", Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif, sans-serif;
+      background-image:url('https://images3.alphacoders.com/101/thumb-1920-1010294.jpg');
+    }
+    .menu-card {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .menu-card:active,
+    .menu-card:hover {
+      transform: scale(0.97);
+    }
+    .btn-danger {
+      background-color: #5dceffdf;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark" style="background-color: rgba(82, 234, 248, 0.5);">
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1">Sigigi</span>
+    </div>
+  </nav>
+
+  <div class="container py-4">
+    <div class="menu-card p-4">
+      <h4 class="text-center mb-4">Pilih Gejala yang Anda Rasakan</h4>
+      <form id="formGejala">
+        <div class="row" id="daftarGejala"></div>
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-danger">DIAGNOSA</button>
+        </div>
+      </form>
+      <div id="hasil" class="mt-4"></div>
+    </div>
+  </div>
+
+  <script>
+    const gejalaList = [
+      { id: "G01", desc: "Nyeri panas/dingin" },
+      { id: "G02", desc: "Lubang gigi" },
+      { id: "G03", desc: "Nyeri spontan" },
+      { id: "G04", desc: "Gigi mati rasa" },
+      { id: "G05", desc: "Bau mulut" },
+      { id: "G06", desc: "Perubahan warna gigi" },
+      { id: "G07", desc: "Gusi surut" },
+      { id: "G08", desc: "Gigi goyang" },
+      { id: "G10", desc: "Pendarahan gusi" },
+      { id: "G11", desc: "Gusi merah" },
+      { id: "G12", desc: "Bengkak" },
+      { id: "G14", desc: "Napas bau" },
+      { id: "G15", desc: "Nyeri saat makan/minum manis/panas/dingin" },
+      { id: "G16", desc: "Gigi terasa longgar" },
+      { id: "G17", desc: "Goyang saat ditekan" },
+      { id: "G18", desc: "Bisa disertai nyeri" },
+      { id: "G19", desc: "Bengkak di gusi/wajah" },
+      { id: "G20", desc: "Nyeri berdenyut" },
+      { id: "G21", desc: "Nanah keluar" },
+      { id: "G22", desc: "Demam" },
+      { id: "G23", desc: "Nyeri sendi rahang" },
+      { id: "G24", desc: "Bunyi klik saat membuka mulut" },
+      { id: "G25", desc: "Sakit kepala" },
+      { id: "G26", desc: "Sulit mengunyah" },
+      { id: "G27", desc: "Gigi bungsu tumbuh miring" },
+      { id: "G28", desc: "Nyeri di belakang mulut" },
+      { id: "G29", desc: "Pembengkakan" },
+      { id: "G30", desc: "Infeksi" },
+      { id: "G31", desc: "Bengkak tanpa nyeri" },
+      { id: "G32", desc: "Gigi bergeser" }
+    ];
+
+    const rules = [
+      {
+        penyakit: "Pulpitis",
+        gejala: ["G01", "G02", "G03"],
+        pengobatan: "Root canal, penambalan, pencabutan bila parah",
+        pencegahan: "Sikat gigi rutin, hindari makanan manis"
+      },
+      {
+        penyakit: "Gangren Pulpa",
+        gejala: ["G04", "G05", "G06"],
+        pengobatan: "Saluran akar atau pencabutan",
+        pencegahan: "Tangani pulpitis lebih awal"
+      },
+      {
+        penyakit: "Penyakit Periodontal",
+        gejala: ["G07", "G08", "G10"],
+        pengobatan: "Scaling, antibiotik, pembedahan",
+        pencegahan: "Menjaga kebersihan mulut"
+      },
+      {
+        penyakit: "Radang Gusi",
+        gejala: ["G11", "G12", "G13", "G14"],
+        pengobatan: "Scaling, antiseptik",
+        pencegahan: "Sikat gigi 2x sehari"
+      },
+      {
+        penyakit: "Karies",
+        gejala: ["G02", "G15"],
+        pengobatan: "Penambalan, fluoridasi",
+        pencegahan: "Sikat gigi dengan fluoride"
+      },
+      {
+        penyakit: "Mobilitas Gigi",
+        gejala: ["G16", "G17", "G18"],
+        pengobatan: "Splinting, obati penyebab",
+        pencegahan: "Jaga kebersihan gigi dan oklusi"
+      },
+      {
+        penyakit: "Abses Gigi",
+        gejala: ["G19", "G20", "G21", "G22"],
+        pengobatan: "Drainase, antibiotik, pencabutan",
+        pencegahan: "Tangani infeksi lebih awal"
+      },
+      {
+        penyakit: "Gangguan TMJ",
+        gejala: ["G23", "G24", "G25", "G26"],
+        pengobatan: "Latihan rahang, obat, fisioterapi",
+        pencegahan: "Hindari membuka mulut lebar"
+      },
+      {
+        penyakit: "Impaksi Mesioangular",
+        gejala: ["G27", "G28", "G29", "G30"],
+        pengobatan: "Odontektomi",
+        pencegahan: "Rontgen remaja, cabut bila abnormal"
+      },
+      {
+        penyakit: "Kista Gigi",
+        gejala: ["G31", "G32"],
+        pengobatan: "Eksisi, cabut gigi penyebab",
+        pencegahan: "Rutin kontrol gigi"
+      }
+    ];
+
+    const daftar = document.getElementById("daftarGejala");
+    gejalaList.forEach(g => {
+      const col = document.createElement("div");
+      col.className = "col-12 col-md-6 mb-2";
+      col.innerHTML = `<div class='form-check'><input class='form-check-input' type='checkbox' name='gejala' value='${g.id}' id='${g.id}'> <label class='form-check-label' for='${g.id}'>${g.desc}</label></div>`;
+      daftar.appendChild(col);
+    });
+
+    function diagnosaTerbaik(input) {
+      const hasil = rules.map(rule => {
+        const cocok = rule.gejala.filter(g => input.includes(g)).length;
+        const persen = (cocok / rule.gejala.length) * 100;
+        return { ...rule, cocok, persen: persen.toFixed(0) };
+      }).filter(r => r.cocok > 0)
+        .sort((a, b) => b.cocok - a.cocok);
+
+      return hasil.length > 0 ? hasil[0] : null;
+    }
+
+    document.getElementById("formGejala").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const dipilih = [...document.querySelectorAll("input[name=gejala]:checked")].map(x => x.value);
+      const hasil = diagnosaTerbaik(dipilih);
+      const output = document.getElementById("hasil");
+      if (!hasil) {
+        output.innerHTML = "<div class='alert alert-warning'>Belum bisa menentukan diagnosa. Mohon lengkapi gejala.</div>";
+      } else {
+        output.innerHTML = `
+          <div class='alert alert-success'>
+            <h5>${hasil.penyakit} (${hasil.persen}% gejala cocok)</h5>
+            <p><strong>Pengobatan:</strong> ${hasil.pengobatan}<br>
+            <strong>Pencegahan:</strong> ${hasil.pencegahan}</p>
+          </div>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>
